@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1111</width>
+    <height>639</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(0, 35, 51);</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>-1</y>
+     <width>1091</width>
+     <height>631</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(180, 190, 201);</string>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>REGISTRO DE VENTA</string>
+    </attribute>
+    <widget class="QFrame" name="frame">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1071</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(202, 202, 202);
+border: 1px solid;
+border-radius: 5px;
+</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="buscarProducto">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>1011</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>BUSCAR PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonAgregar">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>130</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>AGREGAR</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonEliminar">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>130</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>ELIMINAR</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QTableWidget" name="tablaVenta">
+     <property name="geometry">
+      <rect>
+       <x>15</x>
+       <y>211</y>
+       <width>1061</width>
+       <height>301</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;
+border-radius: 3px;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="botonVender">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>540</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>VENDER</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="botonLimpiar_3">
+     <property name="geometry">
+      <rect>
+       <x>890</x>
+       <y>540</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>LIMPIAR CAMPOS</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>REGISTRO DE PRODUCTO</string>
+    </attribute>
+    <widget class="QFrame" name="frame_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1071</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(202, 202, 202);
+border: 1px solid;
+border-radius: 5px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="textCantidad">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>70</y>
+        <width>71</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>NO.</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="textDescripcion">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>70</y>
+        <width>521</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>DESCRIPCION DE PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="textCosto">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>70</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>PRECIO COSTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="textVenta">
+      <property name="geometry">
+       <rect>
+        <x>930</x>
+        <y>70</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>PRECIO VENTA</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="textMedicion">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>70</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>MEDIDA(U, C, P)</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateEdit">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>143</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>150</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>FECHA DE REGISTRO</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonEliminar_2">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>140</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>REGISTRAR PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonEliminar_3">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>130</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>CARGAR ARCHIVO</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QTableWidget" name="tablaVenta_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>210</y>
+       <width>1051</width>
+       <height>301</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;
+border-radius: 3px;</string>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::NoPen</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>0</number>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+    <widget class="QPushButton" name="botonLimpiar">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>540</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>LIMPIAR CAMPOS</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>ACTUALIZACION</string>
+    </attribute>
+    <widget class="QFrame" name="frame_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1071</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(202, 202, 202);
+border: 1px solid;
+border-radius: 5px;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLineEdit" name="upCantidad_2">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>70</y>
+        <width>71</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>NO.</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="UPDescripcion_2">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>70</y>
+        <width>521</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>DESCRIPCION DEL PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="upCosto_2">
+      <property name="geometry">
+       <rect>
+        <x>790</x>
+        <y>70</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>PRECIO COSTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="upVenta_2">
+      <property name="geometry">
+       <rect>
+        <x>930</x>
+        <y>70</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>PRECIO VENTA</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="UPMedicion_2">
+      <property name="geometry">
+       <rect>
+        <x>670</x>
+        <y>70</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>MEDIDA(U, C, P)</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dateEdit_2">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>143</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>150</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>FECHA DE REGISTRO</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonEliminar_4">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>140</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>ACTUALIZAR PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="UPDescripcion_3">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>10</y>
+        <width>741</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>BUSCAR PRODUCTO</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QPushButton" name="botonLimpiar_2">
+     <property name="geometry">
+      <rect>
+       <x>450</x>
+       <y>540</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>LIMPIAR CAMPOS</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tablaVenta_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>220</y>
+       <width>1051</width>
+       <height>301</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;
+border-radius: 3px;</string>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::NoPen</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>0</number>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_4">
+    <attribute name="title">
+     <string>INVENTARIO</string>
+    </attribute>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
