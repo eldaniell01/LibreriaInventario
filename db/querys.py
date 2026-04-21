@@ -17,3 +17,16 @@ class Query:
             
         except Exception as e:
             return e
+        
+    def seleccionarProducto(self, texto):
+        query = """
+        
+                    SELECT idProducto, descripcion, medida, precioVenta FROM Producto WHERE descripcion LIKE CONCAT('%', %s, '%') LIMIT 10
+        
+                """
+        try:
+            result = self.db.execute_query(query, (texto,))
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e

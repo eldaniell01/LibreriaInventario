@@ -1,8 +1,8 @@
 from PyQt6 import uic
 import os
 from openpyxl import load_workbook
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QMessageBox, QFileDialog, QTableWidget, QHeaderView, QTableWidgetItem
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QMessageBox, QFileDialog, QTableWidget, QComboBox, QHeaderView, QTableWidgetItem
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QFont
 from db.conexion import ConexionMysql
 from db.querys import Query
@@ -20,11 +20,22 @@ class Inventory(QMainWindow):
         self.main.botonRegistrar.clicked.connect(self.registrarProducto)
         self.main.botonCargar.clicked.connect(self.abrirExcel)
         self.main.botonRListado.clicked.connect(self.registrarListado)
+        self.main.botonLimpiar.clicked.connect(self.limpiarTodo)
+        self.main.listadoProductos.setEditable(True)
+        self.main.listadoProductos.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.timer = QTimer()
+        self.timer.setInterval(500)
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.ejecutarBusqueda)
+        self.main.listadoProductos.lineEdit().textChanged.connect(self.realizarBusqueda)
+        self.main.listadoProductos.activated.connect(self.agregarVenta)
         self.showTVenta()
         self.showTProducto()
+        self.seleccionando = False
+        
         
     def showTVenta(self):
-        columns = ['CANTIDAD', 'DESC. DEL PRODUCTO', 'MEDIDA', 'PRECIO COSTO', 'PRECIO VENTA']
+        columns = ['DESC. DEL PRODUCTO', 'MEDIDA', 'PRECIO VENTA']
         self.main.tablaVenta.setFont(QFont("Arial", 12))
         self.main.tablaVenta.setColumnCount(len(columns))
         for column, name in enumerate(columns):
@@ -78,6 +89,7 @@ class Inventory(QMainWindow):
             fecha = self.main.fechaRegistro.date().toString("yyyy-MM-dd")
             fila = self.main.tablaProducto.rowCount()
             query.insertarProducto(cantidad, descripcion, medida, precioCosto, precioVenta, fecha)
+            self.limpiar()
             self.db.close_connection()
             self.main.tablaProducto.insertRow(fila)
             self.main.tablaProducto.setItem(fila, 0, QTableWidgetItem(str(cantidad)))
@@ -135,3 +147,66 @@ class Inventory(QMainWindow):
                 self.db.close_connection()
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")  
+    
+    
+    def realizarBusqueda(self):
+        self.timer.start()
+    
+    def ejecutarBusqueda(self):
+        texto = self.main.listadoProductos.currentText()
+        if texto.strip():
+            self.buscarProductos(texto)
+        """self.buscarProductos(texto)
+        self.timer.stop()"""
+    
+    def buscarProductos(self, texto):
+        query = Query()
+        if texto == "":
+            return
+
+        try:
+            listProductos = query.seleccionarProducto(texto)
+            self.main.listadoProductos.blockSignals(True)
+            self.main.listadoProductos.clear()
+            for informacion in listProductos:
+                texto_i = f"{informacion[0]} {informacion[1]} {informacion[2]} {informacion[3]}"
+                self.main.listadoProductos.addItem(texto_i, informacion)
+            self.main.listadoProductos.blockSignals(False)
+            if listProductos:
+               self.main.listadoProductos.showPopup()
+        except Exception as e:
+            self.error.critical(self, 'Error', f"ERROR: {e}") 
+
+    def agregarVenta(self, index):
+        data = self.main.listadoProductos.itemData(index)
+        
+        if data:
+            try:
+                idProducto = data[0]
+                descripcion = data[1]
+                medida = data[2]
+                precioVenta = data[3] 
+                
+                fila = self.main.tablaVenta.rowCount()
+                self.main.tablaVenta.insertRow(fila)
+                self.main.tablaVenta.setItem(fila, 0, QTableWidgetItem(descripcion))
+                self.main.tablaVenta.setItem(fila, 1, QTableWidgetItem(medida))
+                self.main.tablaVenta.setItem(fila, 2, QTableWidgetItem(str(precioVenta)))
+                self.main.listadoProductos.clearEditText()
+                self.main.listadoProductos.clear()
+            except Exception as e:
+                self.error.critical(self, 'Error', f"ERROR: {e}") 
+        
+            
+
+    def limpiar(self):
+        self.main.textCantidad.setText("")
+        self.main.textDescripcion.setText("")
+        self.main.textMedicion.setText("")
+        self.main.textCosto.setText("")
+        self.main.textVenta.setText("")
+        
+        
+    def limpiarTodo(self):
+        self.limpiar()
+        self.main.tablaProducto.setRowCount(0)
