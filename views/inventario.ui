@@ -29,7 +29,7 @@
     <string notr="true">background-color: rgb(180, 190, 201);</string>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -629,7 +629,7 @@ border-radius: 5px;</string>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLineEdit" name="upCantidad_2">
+     <widget class="QLineEdit" name="upCantidad">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -651,7 +651,7 @@ border: 1px solid;</string>
        <string>NO.</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="UPDescripcion_2">
+     <widget class="QLineEdit" name="upDescripcion">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -673,7 +673,7 @@ border: 1px solid;</string>
        <string>DESCRIPCION DEL PRODUCTO</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="upCosto_2">
+     <widget class="QLineEdit" name="upCosto">
       <property name="geometry">
        <rect>
         <x>790</x>
@@ -695,7 +695,7 @@ border: 1px solid;</string>
        <string>PRECIO COSTO</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="upVenta_2">
+     <widget class="QLineEdit" name="upVenta">
       <property name="geometry">
        <rect>
         <x>930</x>
@@ -717,7 +717,7 @@ border: 1px solid;</string>
        <string>PRECIO VENTA</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="UPMedicion_2">
+     <widget class="QLineEdit" name="upMedicion">
       <property name="geometry">
        <rect>
         <x>670</x>
@@ -739,7 +739,7 @@ border: 1px solid;</string>
        <string>MEDIDA(U, C, P)</string>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateEdit_2">
+     <widget class="QDateEdit" name="fechaUp">
       <property name="geometry">
        <rect>
         <x>470</x>
@@ -770,7 +770,7 @@ border: none;</string>
        <string>FECHA DE REGISTRO</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="botonEliminar_4">
+     <widget class="QPushButton" name="botonActualizar">
       <property name="geometry">
        <rect>
         <x>870</x>
@@ -801,12 +801,31 @@ QPushButton:pressed {
        <string>ACTUALIZAR PRODUCTO</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="UPDescripcion_3">
+     <widget class="QComboBox" name="listadoProductosActualizacion">
       <property name="geometry">
        <rect>
-        <x>200</x>
-        <y>10</y>
-        <width>741</width>
+        <x>30</x>
+        <y>20</y>
+        <width>1011</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>BUSCAR PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="idProducto">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>140</y>
+        <width>71</width>
         <height>41</height>
        </rect>
       </property>
@@ -820,11 +839,96 @@ border-radius: 10px;
 border: 1px solid;</string>
       </property>
       <property name="placeholderText">
-       <string>BUSCAR PRODUCTO</string>
+       <string>ID</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>110</y>
+        <width>181</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>DESCRIPCION DEL PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>110</y>
+        <width>51</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>MEDIDA</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>110</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>PRECIO COSTO</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>940</x>
+        <y>110</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>PRECIO VENTA</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>110</y>
+        <width>61</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: none;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string>CANTIDAD</string>
       </property>
      </widget>
     </widget>
-    <widget class="QPushButton" name="botonLimpiar_2">
+    <widget class="QPushButton" name="botonLimpiarA">
      <property name="geometry">
       <rect>
        <x>450</x>
@@ -902,6 +1006,131 @@ border-radius: 3px;</string>
     <attribute name="title">
      <string>INVENTARIO</string>
     </attribute>
+    <widget class="QFrame" name="frame_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1071</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(202, 202, 202);
+border: 1px solid;
+border-radius: 5px;
+</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QPushButton" name="botonAgregar_2">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>130</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>AGREGAR</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonEliminar_2">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>130</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>ELIMINAR</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="listadoProductos_2">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>1011</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>BUSCAR PRODUCTO</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="textCantidadV_2">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>80</y>
+        <width>231</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">text-align: center;
+background-color: rgb(255, 255, 255);
+border-radius: 10px;
+border: 1px solid;</string>
+      </property>
+      <property name="placeholderText">
+       <string>CANTIDAD</string>
+      </property>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>

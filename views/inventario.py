@@ -17,20 +17,27 @@ class Inventory(QMainWindow):
         self.db = ConexionMysql()
         self.error = QMessageBox(self)
         self.main.fechaRegistro.setDate(datetime.now().date())
+        self.main.fechaUp.setDate(datetime.now().date())
         self.main.botonRegistrar.clicked.connect(self.registrarProducto)
         self.main.botonCargar.clicked.connect(self.abrirExcel)
         self.main.botonRListado.clicked.connect(self.registrarListado)
         self.main.botonLimpiar.clicked.connect(self.limpiarTodo)
         self.main.listadoProductos.setEditable(True)
         self.main.listadoProductos.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.main.listadoProductosActualizacion.setEditable(True)
+        self.main.listadoProductosActualizacion.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.timer = QTimer()
-        self.timer.setInterval(500)
+        self.timer.setInterval(800)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.ejecutarBusqueda)
         self.main.listadoProductos.lineEdit().textChanged.connect(self.realizarBusqueda)
+        self.main.listadoProductosActualizacion.lineEdit().textChanged.connect(self.realizarBusqueda)
+        self.main.listadoProductosActualizacion.activated.connect(self.actualizarProducto)
         self.main.botonLimpiarV.clicked.connect(self.limpiarTodo)
         self.main.botonAgregar.clicked.connect(self.agregarVenta)
         self.main.botonEliminar.clicked.connect(self.borrarRegistro)
+        self.main.botonActualizar.clicked.connect(self.actualizar)
+        self.main.botonLimpiarA.clicked.connect(self.limpiar)
         self.showTVenta()
         self.showTProducto()
         self.seleccionando = False
@@ -157,11 +164,32 @@ class Inventory(QMainWindow):
     
     def ejecutarBusqueda(self):
         texto = self.main.listadoProductos.currentText()
+        texto2 = self.main.listadoProductosActualizacion.currentText()
         if texto.strip():
             self.buscarProductos(texto)
+        elif texto2.strip():
+            self.buscarProductoActualizacion(texto2)
+            
         """self.buscarProductos(texto)
         self.timer.stop()"""
     
+    def buscarProductoActualizacion(self, text):
+        query = Query()
+        if text == "":
+            return
+        try:
+            protuctos = query.seleccionarProducto(text)
+            self.main.listadoProductosActualizacion.blockSignals(True)
+            self.main.listadoProductosActualizacion.clear()
+            for informacion in protuctos:
+                texto_i = f"{informacion[0]} {informacion[1]} {informacion[2]} {informacion[3]} {informacion[4]} {informacion[5]}"
+                self.main.listadoProductosActualizacion.addItem(texto_i, informacion)
+            self.main.listadoProductosActualizacion.blockSignals(False)
+            if protuctos:    
+                self.main.listadoProductosActualizacion.showPopup()
+        except Exception as e:
+            self.error.critical(self, 'Error', f"ERROR: {e}") 
+            
     def buscarProductos(self, texto):
         query = Query()
         if texto == "":
@@ -172,14 +200,62 @@ class Inventory(QMainWindow):
             self.main.listadoProductos.blockSignals(True)
             #self.main.listadoProductos.clear()
             for informacion in listProductos:
-                texto_i = f"{informacion[0]} {informacion[1]} {informacion[2]} {informacion[3]}"
+                texto_i = f"{informacion[0]} {informacion[1]} {informacion[2]} {informacion[3]} {informacion[5]}"
                 self.main.listadoProductos.addItem(texto_i, informacion)
             self.main.listadoProductos.blockSignals(False)
             if listProductos:
                self.main.listadoProductos.showPopup()
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}") 
-
+            
+    def actualizarProducto(self, index):
+        data = self.main.listadoProductosActualizacion.itemData(index)
+        if data:
+            try: 
+                idp = data[0]
+                cantidad = data[1]
+                descripcion = data[2]
+                medida = data[3]
+                precioV= data[4]
+                precioC = data[5]
+                self.main.idProducto.setText(str(idp))
+                self.main.upCantidad.setText(str(cantidad))
+                self.main.upDescripcion.setText(descripcion)
+                self.main.upMedicion.setText(medida)
+                self.main.upCosto.setText(str(precioC))
+                self.main.upVenta.setText(str(precioV))
+            except Exception as e:
+                self.error.critical(self, 'Error', f"ERROR: {e}")
+    def actualizar (self):
+        query = Query()
+        message_box = QMessageBox(self)
+        messageInfo = QMessageBox()
+        message_box.setWindowTitle("Confirmación")
+        message_box.setText("¿Estás seguro de que desea actualizar el producto?")
+        message_box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        message_box.setIcon(QMessageBox.Icon.Question)
+        response = message_box.exec()
+        try:
+            if response == QMessageBox.StandardButton.Yes:
+                idp = int(self.main.idProducto.text())
+                cantidad = int( self.main.upCantidad.text())
+                descripcion = self.main.upDescripcion.text()
+                medida = self.main.upMedicion.text()
+                precioV= float(self.main.upVenta.text())
+                precioC = float(self.main.upCosto.text())
+                fecha = self.main.fechaUp.date().toString("yyyy-MM-dd")
+                result = query.actualizarProductos(cantidad,descripcion,medida, precioC, precioV, fecha,idp)
+                messageInfo.information(None,"ACTUALIZACION", "Operacion realizada con exito")
+                self.main.idProducto.setText("")
+                self.main.upCantidad.setText("")
+                self.main.upDescripcion.setText("")
+                self.main.upMedicion.setText("")
+                self.main.upCosto.setText("")
+                self.main.upVenta.setText("")
+                    
+        except Exception as e:
+            self.error.critical(self, 'Error', f"ERROR: {e}")
+            
     def agregarVenta(self, index):
         self.timer.stop()
         self.main.listadoProductos.blockSignals(True)
@@ -189,9 +265,9 @@ class Inventory(QMainWindow):
             try:
                 cantidad = self.main.textCantidadV.text()
                 idProducto = data[0]
-                descripcion = data[1]
-                medida = data[2]
-                precioVenta = data[3] 
+                descripcion = data[2]
+                medida = data[3]
+                precioVenta = data[5] 
                 subTotal = int(cantidad)*precioVenta
                 fila = self.main.tablaVenta.rowCount()
                 self.main.tablaVenta.insertRow(fila)
@@ -234,6 +310,12 @@ class Inventory(QMainWindow):
         self.main.textVenta.setText("")
         self.main.tablaVenta.setRowCount(0)
         self.main.totalVenta.setText("0.00")
+        self.main.idProducto.setText("")
+        self.main.upCantidad.setText("")
+        self.main.upDescripcion.setText("")
+        self.main.upMedicion.setText("")
+        self.main.upCosto.setText("")
+        self.main.upVenta.setText("")
     
       
         
@@ -243,5 +325,9 @@ class Inventory(QMainWindow):
         self.main.listadoProductos.clear()
         self.main.listadoProductos.clearEditText()
         self.main.listadoProductos.blockSignals(False)
+        self.main.listadoProductosActualizacion.blockSignals(True)
+        self.main.listadoProductosActualizacion.clear()
+        self.main.listadoProductosActualizacion.clearEditText()
+        self.main.listadoProductosActualizacion.blockSignals(False)
         self.limpiar()
         self.main.tablaProducto.setRowCount(0)

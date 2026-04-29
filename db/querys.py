@@ -21,7 +21,7 @@ class Query:
     def seleccionarProducto(self, texto):
         query = """
         
-                    SELECT idProducto, descripcion, medida, precioVenta FROM Producto WHERE descripcion LIKE CONCAT('%', %s, '%') LIMIT 10
+                    SELECT idProducto, cantidad, descripcion, medida, precioCosto, precioVenta FROM Producto WHERE descripcion LIKE CONCAT('%', %s, '%') LIMIT 10
         
                 """
         try:
@@ -30,3 +30,20 @@ class Query:
             return result
         except Exception as e:
             return e
+        finally: 
+            self.db.close_connection()
+    def actualizarProductos(self, cantidad, descripcion, medida, precioC, PrecioV, fechaActualizacion, id):
+        query = """
+        
+                UPDATE Producto SET cantidad=%s, descripcion=%s, medida=%s, precioCosto=%s, precioVenta=%s, fechaActualizacion=%s WHERE idProducto=%s
+        
+                """
+        try: 
+            values = (cantidad, descripcion, medida, precioC, PrecioV, fechaActualizacion, id)  
+            result = self.db.execute_query(query, values)
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e
+        finally: 
+            self.db.close_connection()
