@@ -1,4 +1,5 @@
 from .conexion import ConexionMysql
+import json
 
 class Query:
     def __init__(self) -> None:
@@ -47,3 +48,22 @@ class Query:
             return e
         finally: 
             self.db.close_connection()
+            
+    def insertarVenta(self, fecha, listaProducto, totalVenta):
+        query = """
+                
+                CALL insertarVenta(%s, %s, %s)
+        
+                """
+        try: 
+            datajs = json.dumps(listaProducto)
+            values= (fecha, datajs, totalVenta)
+            result = self.db.execute_query(query, values)
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e
+        finally: 
+            self.db.close_connection()
+    
+        

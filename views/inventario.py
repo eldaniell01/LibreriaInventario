@@ -38,6 +38,7 @@ class Inventory(QMainWindow):
         self.main.botonEliminar.clicked.connect(self.borrarRegistro)
         self.main.botonActualizar.clicked.connect(self.actualizar)
         self.main.botonLimpiarA.clicked.connect(self.limpiar)
+        self.main.botonVender.clicked.connect(self.vender)
         self.showTVenta()
         self.showTProducto()
         self.seleccionando = False
@@ -45,7 +46,7 @@ class Inventory(QMainWindow):
         
         
     def showTVenta(self):
-        columns = ['CANTIDAD','DESC. DEL PRODUCTO', 'MEDIDA', 'PRECIO VENTA', 'SUBTOTAL']
+        columns = ['ID','CANTIDAD','DESC. DEL PRODUCTO', 'MEDIDA', 'PRECIO VENTA', 'SUBTOTAL']
         self.main.tablaVenta.setFont(QFont("Arial", 12))
         self.main.tablaVenta.setColumnCount(len(columns))
         for column, name in enumerate(columns):
@@ -256,26 +257,30 @@ class Inventory(QMainWindow):
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")
             
-    def agregarVenta(self, index):
+    def agregarVenta(self):
         self.timer.stop()
         self.main.listadoProductos.blockSignals(True)
-        data = self.main.listadoProductos.itemData(index)
-        
+        data = self.main.listadoProductos.currentData()
+
+        #data = self.main.listadoProductos.itemData(index)
+        print(data)
         if data:
             try:
                 cantidad = self.main.textCantidadV.text()
                 idProducto = data[0]
+                print(idProducto)
                 descripcion = data[2]
                 medida = data[3]
                 precioVenta = data[5] 
                 subTotal = int(cantidad)*precioVenta
                 fila = self.main.tablaVenta.rowCount()
                 self.main.tablaVenta.insertRow(fila)
-                self.main.tablaVenta.setItem(fila, 0, QTableWidgetItem(cantidad))
-                self.main.tablaVenta.setItem(fila, 1, QTableWidgetItem(descripcion))
-                self.main.tablaVenta.setItem(fila, 2, QTableWidgetItem(medida))
-                self.main.tablaVenta.setItem(fila, 3, QTableWidgetItem(str(precioVenta)))
-                self.main.tablaVenta.setItem(fila, 4, QTableWidgetItem(str(subTotal)))
+                self.main.tablaVenta.setItem(fila, 0, QTableWidgetItem(str(idProducto)))
+                self.main.tablaVenta.setItem(fila, 1, QTableWidgetItem(cantidad))
+                self.main.tablaVenta.setItem(fila, 2, QTableWidgetItem(descripcion))
+                self.main.tablaVenta.setItem(fila, 3, QTableWidgetItem(medida))
+                self.main.tablaVenta.setItem(fila, 4, QTableWidgetItem(str(precioVenta)))
+                self.main.tablaVenta.setItem(fila, 5, QTableWidgetItem(str(subTotal)))
                 self.main.listadoProductos.clear()
                 self.main.listadoProductos.clearEditText()
                 self.main.listadoProductos.blockSignals(False)
@@ -288,7 +293,24 @@ class Inventory(QMainWindow):
         else:
             self.error.critical(self, 'Error', f"ERROR: campo vacio o hubo un error interno")
        
-
+    def vender(self):
+        tabla = self.main.tablaVenta
+        detalle_producto = []
+        for fila in range(tabla.rowCount()):
+            try:
+                item_id = tabla.item(fila, 0)
+                item_cantidad = tabla.item(fila, 1)
+                item_subTotal = tabla.item(fila, 5)
+                registro = {
+                    "idProducto": int(item_id.text()),
+                    "cantidad": int(item_cantidad.text()),
+                    "sub_total": float(item_subTotal.text())
+                }
+                detalle_producto.append(registro)
+                print(detalle_producto)
+            except Exception as e:
+                self.error.critical(self, 'Error', f"ERROR: {e}")
+                
     def borrarRegistro(self):
         fila = self.main.tablaVenta.currentRow()
         columna = self.main.tablaVenta.item(fila, 4)
