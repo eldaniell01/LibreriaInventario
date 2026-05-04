@@ -17,6 +17,7 @@ class Inventory(QMainWindow):
         self.db = ConexionMysql()
         self.error = QMessageBox(self)
         self.main.fechaRegistro.setDate(datetime.now().date())
+        self.main.fechaVenta.setDate(datetime.now().date())
         self.main.fechaUp.setDate(datetime.now().date())
         self.main.botonRegistrar.clicked.connect(self.registrarProducto)
         self.main.botonCargar.clicked.connect(self.abrirExcel)
@@ -42,7 +43,7 @@ class Inventory(QMainWindow):
         self.showTVenta()
         self.showTProducto()
         self.seleccionando = False
-        self.total = 0
+        
         
         
     def showTVenta(self):
@@ -261,7 +262,7 @@ class Inventory(QMainWindow):
         self.timer.stop()
         self.main.listadoProductos.blockSignals(True)
         data = self.main.listadoProductos.currentData()
-
+        total = float(self.main.totalVenta.text())
         #data = self.main.listadoProductos.itemData(index)
         print(data)
         if data:
@@ -284,8 +285,8 @@ class Inventory(QMainWindow):
                 self.main.listadoProductos.clear()
                 self.main.listadoProductos.clearEditText()
                 self.main.listadoProductos.blockSignals(False)
-                self.total = self.total +subTotal
-                self.main.totalVenta.setText(str(self.total))
+                total = total+subTotal
+                self.main.totalVenta.setText(str(total))
             except Exception as e:
                 self.error.critical(self, 'Error', f"ERROR: {e}")
             finally: 
@@ -294,10 +295,13 @@ class Inventory(QMainWindow):
             self.error.critical(self, 'Error', f"ERROR: campo vacio o hubo un error interno")
        
     def vender(self):
+        query = Query()
         tabla = self.main.tablaVenta
         detalle_producto = []
-        for fila in range(tabla.rowCount()):
-            try:
+        fecha = self.main.fechaVenta.date().toString("yyyy-MM-dd")
+        total = float(self.main.totalVenta.text())
+        try:
+            for fila in range(tabla.rowCount()):
                 item_id = tabla.item(fila, 0)
                 item_cantidad = tabla.item(fila, 1)
                 item_subTotal = tabla.item(fila, 5)
@@ -307,9 +311,11 @@ class Inventory(QMainWindow):
                     "sub_total": float(item_subTotal.text())
                 }
                 detalle_producto.append(registro)
-                print(detalle_producto)
-            except Exception as e:
-                self.error.critical(self, 'Error', f"ERROR: {e}")
+            result = query.insertarVenta(fecha, detalle_producto, total)
+            print(result)
+        except Exception as e:
+            self.error.critical(self, 'Error', f"ERROR: {e}")
+        print(fecha)
                 
     def borrarRegistro(self):
         fila = self.main.tablaVenta.currentRow()
@@ -338,6 +344,7 @@ class Inventory(QMainWindow):
         self.main.upMedicion.setText("")
         self.main.upCosto.setText("")
         self.main.upVenta.setText("")
+        
     
       
         
@@ -347,6 +354,7 @@ class Inventory(QMainWindow):
         self.main.listadoProductos.clear()
         self.main.listadoProductos.clearEditText()
         self.main.listadoProductos.blockSignals(False)
+        self.main.totalVenta.setText("")
         self.main.listadoProductosActualizacion.blockSignals(True)
         self.main.listadoProductosActualizacion.clear()
         self.main.listadoProductosActualizacion.clearEditText()
