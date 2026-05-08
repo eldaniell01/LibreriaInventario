@@ -29,7 +29,7 @@
     <string notr="true">background-color: rgb(180, 190, 201);</string>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -1041,11 +1041,11 @@ border-radius: 5px;
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QPushButton" name="botonAgregar_2">
+     <widget class="QPushButton" name="botonListarTodo">
       <property name="geometry">
        <rect>
-        <x>220</x>
-        <y>130</y>
+        <x>80</x>
+        <y>60</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -1069,14 +1069,14 @@ QPushButton:pressed {
 </string>
       </property>
       <property name="text">
-       <string>AGREGAR</string>
+       <string>LISTAR TODAS LAS VENTA</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="botonEliminar_2">
+     <widget class="QPushButton" name="botonListarFecha">
       <property name="geometry">
        <rect>
-        <x>680</x>
-        <y>130</y>
+        <x>460</x>
+        <y>60</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -1100,50 +1100,158 @@ QPushButton:pressed {
 </string>
       </property>
       <property name="text">
-       <string>ELIMINAR</string>
+       <string>LISTAR VENTAS POR FECHA</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="listadoProductos_2">
+     <widget class="QDateEdit" name="fechaListaVenta">
       <property name="geometry">
        <rect>
-        <x>30</x>
-        <y>20</y>
-        <width>1011</width>
+        <x>460</x>
+        <y>130</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="botonGuardarExcel">
+      <property name="geometry">
+       <rect>
+        <x>900</x>
+        <y>140</y>
+        <width>161</width>
         <height>41</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">text-align: center;
-background-color: rgb(255, 255, 255);
-border-radius: 10px;
-border: 1px solid;</string>
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
       </property>
-      <property name="placeholderText">
-       <string>BUSCAR PRODUCTO</string>
+      <property name="text">
+       <string>GENERAR EXCEL</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="textCantidadV_2">
+     <widget class="QPushButton" name="botonListarProductos">
       <property name="geometry">
        <rect>
-        <x>420</x>
-        <y>80</y>
-        <width>231</width>
+        <x>840</x>
+        <y>60</y>
+        <width>161</width>
         <height>41</height>
        </rect>
       </property>
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
       <property name="styleSheet">
-       <string notr="true">text-align: center;
-background-color: rgb(255, 255, 255);
-border-radius: 10px;
-border: 1px solid;</string>
+       <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
       </property>
-      <property name="placeholderText">
-       <string>CANTIDAD</string>
+      <property name="text">
+       <string>LISTAR PRODUCTOS</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QTableWidget" name="tablaListaVenta">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>210</y>
+       <width>1051</width>
+       <height>311</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+border: 1px solid;
+border-radius: 3px;</string>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+     </property>
+     <property name="textElideMode">
+      <enum>Qt::ElideLeft</enum>
+     </property>
+     <property name="showGrid">
+      <bool>true</bool>
+     </property>
+     <property name="gridStyle">
+      <enum>Qt::NoPen</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>0</number>
+     </property>
+     <attribute name="horizontalHeaderCascadingSectionResizes">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+    <widget class="QPushButton" name="botonLimpiarLista">
+     <property name="geometry">
+      <rect>
+       <x>460</x>
+       <y>540</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    background-color: #164773; /* Color verde */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Estilo cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #0B2B40; /* Verde más oscuro */
+}
+
+/* Opcional: Estilo cuando se presiona */
+QPushButton:pressed {
+    background-color: #878787;
+}
+</string>
+     </property>
+     <property name="text">
+      <string>LIMPIAR CAMPOS</string>
+     </property>
     </widget>
    </widget>
   </widget>

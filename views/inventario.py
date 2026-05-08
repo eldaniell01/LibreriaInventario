@@ -1,5 +1,6 @@
 from PyQt6 import uic
 import os
+import pandas as pd
 from openpyxl import load_workbook
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QMessageBox, QFileDialog, QTableWidget, QComboBox, QHeaderView, QTableWidgetItem
 from PyQt6.QtCore import Qt, QTimer
@@ -14,15 +15,16 @@ class Inventory(QMainWindow):
         super().__init__()
         self.main = uic.loadUi('views/inventario.ui')
         self.main.show()
+        #para tener acceso a la base de datos
         self.db = ConexionMysql()
+        #para mostrar mensajes de error
         self.error = QMessageBox(self)
+        #mostrar fechas
         self.main.fechaRegistro.setDate(datetime.now().date())
         self.main.fechaVenta.setDate(datetime.now().date())
         self.main.fechaUp.setDate(datetime.now().date())
-        self.main.botonRegistrar.clicked.connect(self.registrarProducto)
-        self.main.botonCargar.clicked.connect(self.abrirExcel)
-        self.main.botonRListado.clicked.connect(self.registrarListado)
-        self.main.botonLimpiar.clicked.connect(self.limpiarTodo)
+        self.main.fechaListaVenta.setDate(datetime.now().date())
+        #funcionamiento de los combobox
         self.main.listadoProductos.setEditable(True)
         self.main.listadoProductos.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.main.listadoProductosActualizacion.setEditable(True)
@@ -34,14 +36,27 @@ class Inventory(QMainWindow):
         self.main.listadoProductos.lineEdit().textChanged.connect(self.realizarBusqueda)
         self.main.listadoProductosActualizacion.lineEdit().textChanged.connect(self.realizarBusqueda)
         self.main.listadoProductosActualizacion.activated.connect(self.actualizarProducto)
+        #botones para limpiar o resetear los campos o tablas
         self.main.botonLimpiarV.clicked.connect(self.limpiarTodo)
+        self.main.botonLimpiarA.clicked.connect(self.limpiarTodo)
+        self.main.botonLimpiar.clicked.connect(self.limpiarTodo)
+        self.main.botonLimpiarLista.clicked.connect(self.limpiarTodo)
+        #botones para hacer las operaciones
+        self.main.botonVender.clicked.connect(self.vender)
+        self.main.botonListarFecha.clicked.connect(self.listarVentaFecha)
+        self.main.botonListarTodo.clicked.connect(self.listarVentas)
+        self.main.botonGuardarExcel.clicked.connect(self.guardarVentas)
         self.main.botonAgregar.clicked.connect(self.agregarVenta)
         self.main.botonEliminar.clicked.connect(self.borrarRegistro)
         self.main.botonActualizar.clicked.connect(self.actualizar)
-        self.main.botonLimpiarA.clicked.connect(self.limpiar)
-        self.main.botonVender.clicked.connect(self.vender)
+        self.main.botonRegistrar.clicked.connect(self.registrarProducto)
+        self.main.botonCargar.clicked.connect(self.abrirExcel)
+        self.main.botonRListado.clicked.connect(self.registrarListado)
+        self.main.botonListarProductos.clicked.connect(self.listarProductos)
+        #mostrar las tablas
         self.showTVenta()
         self.showTProducto()
+        self.showTListadoVentas()
         self.seleccionando = False
         
         
@@ -90,6 +105,30 @@ class Inventory(QMainWindow):
         """
         self.main.tablaProducto.setStyleSheet(header_style)
         
+    def showTListadoVentas(self):
+        columns = ['ID FAC', 'FECHA', 'TOTAL', 'CANTIDAD', 'DESCRIPCION', 'MEDIDA', 'PRECIO COSTO', 'PRECIO VENTA', 'SUBTOTAL']
+        self.main.tablaListaVenta.setFont(QFont("Arial", 12))
+        self.main.tablaListaVenta.setColumnCount(len(columns))
+        for column, name in enumerate(columns):
+            self.main.tablaListaVenta.setHorizontalHeaderItem(column, QTableWidgetItem(name))
+        self.main.tablaListaVenta.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.main.tablaListaVenta.setShowGrid(True)
+        self.main.tablaListaVenta.setGridStyle(Qt.PenStyle.SolidLine)
+        header_style = """
+        QHeaderView::section {
+            font-family: "Arial";
+            font-size: 12pt;
+            font-weight: bold;
+            background-color: rgb(255, 255, 255);
+        }
+        QTableWidget{
+            background-color: rgb(255, 255, 255);
+        }
+        
+        
+        """
+        self.main.tablaListaVenta.setStyleSheet(header_style)
+    
     def registrarProducto(self):
         query = Query()
         try:
@@ -329,14 +368,105 @@ class Inventory(QMainWindow):
             self.main.tablaVenta.removeRow(fila)
         except Exception as e: 
             self.error.critical(self, 'Error', f"ERROR: {e}")       
+            
+    def listarVentaFecha(self):
+        query = Query()
+        columns = ['ID FAC', 'FECHA', 'TOTAL', 'CANTIDAD', 'DESCRIPCION', 'MEDIDA', 'PRECIO COSTO', 'PRECIO VENTA', 'SUBTOTAL']
+        self.main.tablaListaVenta.setColumnCount(len(columns))
+        self.main.tablaListaVenta.setHorizontalHeaderLabels(columns)
+        fecha = self.main.fechaListaVenta.date().toString("yyyy-MM-dd")
+        if fecha:
+            try:
+                data = query.reporteVentasFecha(fecha)
+                for i, fila in enumerate(data):
+                    fila_index = self.main.tablaListaVenta.rowCount()
+                    self.main.tablaListaVenta.insertRow(fila_index)
+                    self.main.tablaListaVenta.setItem(fila_index, 0, QTableWidgetItem(str(fila[0])))
+                    self.main.tablaListaVenta.setItem(fila_index, 1, QTableWidgetItem(str(fila[1])))
+                    self.main.tablaListaVenta.setItem(fila_index, 2, QTableWidgetItem(str(fila[2])))
+                    self.main.tablaListaVenta.setItem(fila_index, 3, QTableWidgetItem(str(fila[3])))
+                    self.main.tablaListaVenta.setItem(fila_index, 4, QTableWidgetItem(str(fila[4])))
+                    self.main.tablaListaVenta.setItem(fila_index, 5, QTableWidgetItem(str(fila[5])))
+                    self.main.tablaListaVenta.setItem(fila_index, 6, QTableWidgetItem(str(fila[6])))
+                    self.main.tablaListaVenta.setItem(fila_index, 7, QTableWidgetItem(str(fila[7])))
+                    self.main.tablaListaVenta.setItem(fila_index, 8, QTableWidgetItem(str(fila[8])))
+            except Exception as e: 
+                self.error.critical(self, 'Error', f"ERROR: {e}")
+                
+    def listarVentas(self):
+        query = Query()
+        columns = ['ID FAC', 'FECHA', 'TOTAL', 'CANTIDAD', 'DESCRIPCION', 'MEDIDA', 'PRECIO COSTO', 'PRECIO VENTA', 'SUBTOTAL']
+        self.main.tablaListaVenta.setColumnCount(len(columns))
+        self.main.tablaListaVenta.setHorizontalHeaderLabels(columns)
+        try:
+            data = query.reporteVentas()
+            for i, fila in enumerate(data):
+                fila_index = self.main.tablaListaVenta.rowCount()
+                self.main.tablaListaVenta.insertRow(fila_index)
+                self.main.tablaListaVenta.setItem(fila_index, 0, QTableWidgetItem(str(fila[0])))
+                self.main.tablaListaVenta.setItem(fila_index, 1, QTableWidgetItem(str(fila[1])))
+                self.main.tablaListaVenta.setItem(fila_index, 2, QTableWidgetItem(str(fila[2])))
+                self.main.tablaListaVenta.setItem(fila_index, 3, QTableWidgetItem(str(fila[3])))
+                self.main.tablaListaVenta.setItem(fila_index, 4, QTableWidgetItem(str(fila[4])))
+                self.main.tablaListaVenta.setItem(fila_index, 5, QTableWidgetItem(str(fila[5])))
+                self.main.tablaListaVenta.setItem(fila_index, 6, QTableWidgetItem(str(fila[6])))
+                self.main.tablaListaVenta.setItem(fila_index, 7, QTableWidgetItem(str(fila[7])))
+                self.main.tablaListaVenta.setItem(fila_index, 8, QTableWidgetItem(str(fila[8])))
+        except Exception as e: 
+            self.error.critical(self, 'Error', f"ERROR: {e}")
+            
+    def guardarVentas(self):
+        filas = self.main.tablaListaVenta.rowCount()
+        columnas = self.main.tablaListaVenta.columnCount()
+        cabeceras = [self.main.tablaListaVenta.horizontalHeaderItem(i).text() for i in range(columnas)]
+        data = []
+        for fila in range(filas):
+            filaData = []
+            for columna in range(columnas):
+                item = self.main.tablaListaVenta.item(fila, columna)
+                filaData.append(item.text()if item is not None else "")
+            data.append(filaData)
+        if data:
+            df = pd.DataFrame(data, columns=cabeceras)
+            ruta, _ = QFileDialog.getSaveFileName(None, "Guardar Excel", "Excel Files (*.xlsx)")
+            if ruta:
+                if not ruta.endswith('.xlsx'):
+                    ruta +='.xlsx'
+                try: 
+                    df.to_excel(ruta, index=False)
+                    QMessageBox.information(None, "Exito", "datos exportados correctamente")
+                except Exception as e: 
+                    self.error.critical(self, 'Error', f"ERROR: {e}")
+        else:
+            QMessageBox.warning(None, 'Aviso', 'la tabla esta vacia')
+    
+    def listarProductos(self):
+        query  = Query()
+        columnas = ['ID', 'CANTIDAD', 'DESC. DEL PRODUCTO', 'MEDIDA', 'PRECIO COSTO', 'PRECIO VENTA', 'FECHA']
+        self.main.tablaListaVenta.setColumnCount(len(columnas))
+        self.main.tablaListaVenta.setHorizontalHeaderLabels(columnas)
+        try: 
+            data = query.stock()
+            for i, fila in enumerate(data):
+                fila_index = self.main.tablaListaVenta.rowCount()
+                self.main.tablaListaVenta.insertRow(fila_index)
+                self.main.tablaListaVenta.setItem(fila_index, 0, QTableWidgetItem(str(fila[0])))
+                self.main.tablaListaVenta.setItem(fila_index, 1, QTableWidgetItem(str(fila[1])))
+                self.main.tablaListaVenta.setItem(fila_index, 2, QTableWidgetItem(str(fila[2])))
+                self.main.tablaListaVenta.setItem(fila_index, 3, QTableWidgetItem(str(fila[3])))
+                self.main.tablaListaVenta.setItem(fila_index, 4, QTableWidgetItem(str(fila[4])))
+                self.main.tablaListaVenta.setItem(fila_index, 5, QTableWidgetItem(str(fila[5])))
+                self.main.tablaListaVenta.setItem(fila_index, 6, QTableWidgetItem(str(fila[6])))
+        except Exception as e:
+            self.error.critical(self, 'Error', f"ERROR: {e}")
 
+    
     def limpiar(self):
         self.main.textCantidad.setText("")
         self.main.textDescripcion.setText("")
         self.main.textMedicion.setText("")
         self.main.textCosto.setText("")
         self.main.textVenta.setText("")
-        self.main.tablaVenta.setRowCount(0)
         self.main.totalVenta.setText("0.00")
         self.main.idProducto.setText("")
         self.main.upCantidad.setText("")
@@ -344,6 +474,10 @@ class Inventory(QMainWindow):
         self.main.upMedicion.setText("")
         self.main.upCosto.setText("")
         self.main.upVenta.setText("")
+        self.main.textCantidadV.setText("")
+        self.main.tablaVenta.setRowCount(0)
+        self.main.tablaProducto.setRowCount(0)
+        self.main.tablaListaVenta.setRowCount(0)
         
     
       
@@ -360,4 +494,3 @@ class Inventory(QMainWindow):
         self.main.listadoProductosActualizacion.clearEditText()
         self.main.listadoProductosActualizacion.blockSignals(False)
         self.limpiar()
-        self.main.tablaProducto.setRowCount(0)

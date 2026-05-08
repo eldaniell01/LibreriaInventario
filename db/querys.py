@@ -66,4 +66,48 @@ class Query:
         finally: 
             self.db.close_connection()
     
+    def reporteVentasFecha(self, fecha):
+        query = """
+
+                SELECT * FROM ventasFecha WHERE fecha = %s
         
+                """
+        try:
+            value = (fecha,)
+            result = self.db.execute_query(query, value)
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e
+        finally: 
+            self.db.close_connection()
+            
+    def reporteVentas(self):
+        query = """
+
+                SELECT * FROM ventasFecha
+        
+                """
+        try:
+            result = self.db.execute_query(query, )
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e
+        finally: 
+            self.db.close_connection()
+        
+    def stock(self):
+        query = """
+        
+                SELECT * FROM Producto
+                       
+                """
+        try:
+            result = self.db.execute_query(query,)
+            self.db.close_connection()
+            return result
+        except Exception as e:
+            return e
+        finally: 
+            self.db.close_connection()
