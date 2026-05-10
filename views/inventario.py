@@ -30,7 +30,7 @@ class Inventory(QMainWindow):
         self.main.listadoProductosActualizacion.setEditable(True)
         self.main.listadoProductosActualizacion.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.timer = QTimer()
-        self.timer.setInterval(800)
+        self.timer.setInterval(700)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.ejecutarBusqueda)
         self.main.listadoProductos.lineEdit().textChanged.connect(self.realizarBusqueda)
@@ -257,8 +257,8 @@ class Inventory(QMainWindow):
                 cantidad = data[1]
                 descripcion = data[2]
                 medida = data[3]
-                precioV= data[4]
-                precioC = data[5]
+                precioC= data[4]
+                precioV = data[5]
                 self.main.idProducto.setText(str(idp))
                 self.main.upCantidad.setText(str(cantidad))
                 self.main.upDescripcion.setText(descripcion)
@@ -303,29 +303,30 @@ class Inventory(QMainWindow):
         data = self.main.listadoProductos.currentData()
         total = float(self.main.totalVenta.text())
         #data = self.main.listadoProductos.itemData(index)
-        print(data)
         if data:
             try:
                 cantidad = self.main.textCantidadV.text()
-                idProducto = data[0]
-                print(idProducto)
-                descripcion = data[2]
-                medida = data[3]
-                precioVenta = data[5] 
-                subTotal = int(cantidad)*precioVenta
-                fila = self.main.tablaVenta.rowCount()
-                self.main.tablaVenta.insertRow(fila)
-                self.main.tablaVenta.setItem(fila, 0, QTableWidgetItem(str(idProducto)))
-                self.main.tablaVenta.setItem(fila, 1, QTableWidgetItem(cantidad))
-                self.main.tablaVenta.setItem(fila, 2, QTableWidgetItem(descripcion))
-                self.main.tablaVenta.setItem(fila, 3, QTableWidgetItem(medida))
-                self.main.tablaVenta.setItem(fila, 4, QTableWidgetItem(str(precioVenta)))
-                self.main.tablaVenta.setItem(fila, 5, QTableWidgetItem(str(subTotal)))
-                self.main.listadoProductos.clear()
-                self.main.listadoProductos.clearEditText()
-                self.main.listadoProductos.blockSignals(False)
-                total = total+subTotal
-                self.main.totalVenta.setText(str(total))
+                if data[1] >= int(cantidad):
+                    idProducto = data[0]
+                    descripcion = data[2]
+                    medida = data[3]
+                    precioVenta = data[5] 
+                    subTotal = int(cantidad)*precioVenta
+                    fila = self.main.tablaVenta.rowCount()
+                    self.main.tablaVenta.insertRow(fila)
+                    self.main.tablaVenta.setItem(fila, 0, QTableWidgetItem(str(idProducto)))
+                    self.main.tablaVenta.setItem(fila, 1, QTableWidgetItem(cantidad))
+                    self.main.tablaVenta.setItem(fila, 2, QTableWidgetItem(descripcion))
+                    self.main.tablaVenta.setItem(fila, 3, QTableWidgetItem(medida))
+                    self.main.tablaVenta.setItem(fila, 4, QTableWidgetItem(str(precioVenta)))
+                    self.main.tablaVenta.setItem(fila, 5, QTableWidgetItem(str(subTotal)))
+                    self.main.listadoProductos.clear()
+                    self.main.listadoProductos.clearEditText()
+                    self.main.listadoProductos.blockSignals(False)
+                    total = total+subTotal
+                    self.main.totalVenta.setText(str(total))
+                else:
+                    QMessageBox.warning(None, 'Precausion', f'esta intentando ingresar un valor mayor al del inventario {int(cantidad)}')
             except Exception as e:
                 self.error.critical(self, 'Error', f"ERROR: {e}")
             finally: 
@@ -351,10 +352,9 @@ class Inventory(QMainWindow):
                 }
                 detalle_producto.append(registro)
             result = query.insertarVenta(fecha, detalle_producto, total)
-            print(result)
+            QMessageBox.information(None, 'Informacion', f'mensaje: {result}')
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")
-        print(fecha)
                 
     def borrarRegistro(self):
         fila = self.main.tablaVenta.currentRow()
