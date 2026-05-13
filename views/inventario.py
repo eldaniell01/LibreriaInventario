@@ -131,24 +131,33 @@ class Inventory(QMainWindow):
     
     def registrarProducto(self):
         query = Query()
+        message_box = QMessageBox(self)
+        message_box.setWindowTitle("Confirmación")
+        message_box.setText("¿Estás seguro de que deseas continuar?")
+        message_box.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        message_box.setIcon(QMessageBox.Icon.Question)
+        response = message_box.exec()
         try:
-            cantidad = int(self.main.textCantidad.text())
-            descripcion = str(self.main.textDescripcion.text())
-            medida = str(self.main.textMedicion.text())
-            precioCosto = float(self.main.textCosto.text())
-            precioVenta = float(self.main.textVenta.text())
-            fecha = self.main.fechaRegistro.date().toString("yyyy-MM-dd")
-            fila = self.main.tablaProducto.rowCount()
-            query.insertarProducto(cantidad, descripcion, medida, precioCosto, precioVenta, fecha)
-            self.limpiar()
-            self.db.close_connection()
-            self.main.tablaProducto.insertRow(fila)
-            self.main.tablaProducto.setItem(fila, 0, QTableWidgetItem(str(cantidad)))
-            self.main.tablaProducto.setItem(fila, 1, QTableWidgetItem(descripcion))
-            self.main.tablaProducto.setItem(fila, 2, QTableWidgetItem(medida))
-            self.main.tablaProducto.setItem(fila, 3, QTableWidgetItem(str(precioCosto)))
-            self.main.tablaProducto.setItem(fila, 4, QTableWidgetItem(str(precioVenta)))
-            self.main.tablaProducto.setItem(fila, 5, QTableWidgetItem(fecha))            
+            if response == QMessageBox.StandardButton.Yes:
+                cantidad = int(self.main.textCantidad.text())
+                descripcion = str(self.main.textDescripcion.text())
+                medida = str(self.main.textMedicion.text())
+                precioCosto = float(self.main.textCosto.text())
+                precioVenta = float(self.main.textVenta.text())
+                fecha = self.main.fechaRegistro.date().toString("yyyy-MM-dd")
+                fila = self.main.tablaProducto.rowCount()
+                query.insertarProducto(cantidad, descripcion, medida, precioCosto, precioVenta, fecha)
+                self.limpiar()
+                self.db.close_connection()
+                QMessageBox.information(None,"REGISTRO", "Operacion realizada con exito")
+                self.main.tablaProducto.insertRow(fila)
+                self.main.tablaProducto.setItem(fila, 0, QTableWidgetItem(str(cantidad)))
+                self.main.tablaProducto.setItem(fila, 1, QTableWidgetItem(descripcion))
+                self.main.tablaProducto.setItem(fila, 2, QTableWidgetItem(medida))
+                self.main.tablaProducto.setItem(fila, 3, QTableWidgetItem(str(precioCosto)))
+                self.main.tablaProducto.setItem(fila, 4, QTableWidgetItem(str(precioVenta)))
+                self.main.tablaProducto.setItem(fila, 5, QTableWidgetItem(fecha))
+                            
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")
             
@@ -172,7 +181,7 @@ class Inventory(QMainWindow):
                 self.main.tablaProducto.setItem(fila_index, 1, QTableWidgetItem(str(fila[1].upper())))
                 self.main.tablaProducto.setItem(fila_index, 2, QTableWidgetItem(str(fila[2].upper())))
                 self.main.tablaProducto.setItem(fila_index, 3, QTableWidgetItem(str(fila[3])))
-                self.main.tablaProducto.setItem(fila_index, 4, QTableWidgetItem(str(fila[3])))
+                self.main.tablaProducto.setItem(fila_index, 4, QTableWidgetItem(str(fila[4])))
                 self.main.tablaProducto.setItem(fila_index, 5, QTableWidgetItem(fecha))
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")  
@@ -196,6 +205,7 @@ class Inventory(QMainWindow):
                     fecha = self.main.tablaProducto.item(fila,5)
                     query.insertarProducto(int(float(cantidad.text())), descripcion.text(), medida.text(), float(precioCosto.text()), float(precioVenta.text()), fecha.text())
                 self.db.close_connection()
+                QMessageBox.information(None,"REGISTRO: LISTADO DE PRODUCTOS", "Operacion realizada con exito")
         except Exception as e:
             self.error.critical(self, 'Error', f"ERROR: {e}")  
     
